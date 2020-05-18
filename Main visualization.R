@@ -36,13 +36,38 @@ colnames(df3) <- nama
 
 #remove description row
 new_df3 <- df3[-c(1:4,30,31),]
+#check column type
 str(new_df3)
+#convert into numeric vector
+new_df3$Triwulan.I..Jumlah.Tanaman. <- as.numeric(as.vector(new_df3$Triwulan.I..Jumlah.Tanaman.))
+
+colnames(new_df3)
 
 #Not the best way but it works so far
 barplot(as.numeric(as.vector(new_df3$Triwulan.I..Jumlah.Tanaman.)),
         names.arg = new_df3$Jenis.Tanaman..
         )
+#It is also work finally but it's not looks that neat
+ggplot(new_df3,aes(x=Jenis.Tanaman.., y=Triwulan.I..Jumlah.Tanaman.))+
+  geom_bar(stat="identity")+
+  coord_flip()
 
+  #theme(axis.text.x = element_text(face="bold", color="#993333", 
+   #                              size=14, angle=45),
+    #  axis.text.y = element_text(face="bold", color="#993333", 
+     #                            size=14, angle=45))
+
+#reference: https://www.r-graph-gallery.com/301-custom-lollipop-chart.html#horiz
+ggplot(new_df3, aes(x=Jenis.Tanaman.., y=Triwulan.I..Jumlah.Tanaman.)) +
+  geom_segment( aes(x=Jenis.Tanaman.., xend=Jenis.Tanaman.., y=0, yend=Triwulan.I..Jumlah.Tanaman.), color="skyblue") +
+  geom_point( color="blue", size=4, alpha=0.6) +
+  theme_light() +
+  coord_flip() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank()
+  )
 
 #fourth file
 df4 <- read.csv(here("data","jumlah-tokoh-agama-di-kota-batu-tahun-2017-2019.csv"),header=FALSE)
