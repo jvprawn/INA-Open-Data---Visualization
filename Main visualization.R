@@ -13,7 +13,7 @@ df2 <- read.csv(here("data","data-siup-kota-batu-2017-.csv"),header=FALSE)
 summary(df2) #another hard to digest data
 
 #third file
-df3 <- read.csv(here("data","jumlah-pohon-menghasilkan-dan-produksi-buah-2016.csv"),header=FALSE)
+df3 <- read.csv(here("data","jumlah-pohon-menghasilkan-dan-produksi-buah-2016.csv"),header=FALSE,stringsAsFactors = FALSE)
 summary(df3) #incomplete but much better
 #get every column class
 sapply(df3, class)
@@ -36,8 +36,10 @@ colnames(df3) <- nama
 
 #remove description row
 new_df3 <- df3[-c(1:4,30,31),]
+str(new_df3)
 
-barplot(new_df3$Triwulan.I..Jumlah.Tanaman., #stuck with variable dissonance problem
+#Not the best way but it works so far
+barplot(as.numeric(as.vector(new_df3$Triwulan.I..Jumlah.Tanaman.)),
         names.arg = new_df3$Jenis.Tanaman..
         )
 
